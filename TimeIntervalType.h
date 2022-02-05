@@ -6,7 +6,7 @@ enum TimeIntervalType_t
 {
 	SCHEDULE,
 	UNAVAILABLE,
-	BREAK,
+	BREAKS,
 	BUSY,
 	REQUEST,
 	REJECTED,

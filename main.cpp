@@ -4,6 +4,8 @@
 #include "TimeInterval.h"
 #include "TimeTable.h"
 
+SimpleTimeTable getTimeTablefromJSON(const std::string& filename, TimeIntervalType_t intervalType);
+
 //schedule table must be correct
 TimeInterval getFreeIntervalFromSchedule(const SimpleTimeTable& table)
 {
@@ -31,30 +33,14 @@ SimpleTimeTable getUnavailableTableFromSchedule(const SimpleTimeTable& table)
 
 int main()
 {
-	SimpleTimeTable schedule_table;
-	schedule_table.pushBack(1000, 1200, SCHEDULE);
-	schedule_table.pushBack(1400, 1600, SCHEDULE);
+	SimpleTimeTable schedule_table = getTimeTablefromJSON("schedule.json", SCHEDULE);
 	
+	SimpleTimeTable breaks_table = getTimeTablefromJSON("breaks.json", BREAKS);
 	
-	SimpleTimeTable breaks_table;
-	breaks_table.pushBack(1100, 1115, BREAK);
-	breaks_table.pushBack(1500, 1515, BREAK);
+	SimpleTimeTable busy_table = getTimeTablefromJSON("busy.json", BUSY);
 	
-	SimpleTimeTable busy_table;
-	busy_table.pushBack(1000, 1015);
-	busy_table.pushBack(1015, 1045);
-	busy_table.pushBack(1115, 1130);
-	busy_table.pushBack(1415, 1438);
-	busy_table.pushBack(1517, 1550);
-
-	SimpleTimeTable request_table;
-	request_table.pushBack(950, 1005);
-	request_table.pushBack(1045, 1055);
-	request_table.pushBack(1040, 1100);
-	request_table.pushBack(1400, 1410);
-	request_table.pushBack(1515, 1530);
-	request_table.pushBack(1405, 1415);
-
+	SimpleTimeTable request_table = getTimeTablefromJSON("request.json", REQUEST);
+	
 	CorrectTimeTable main_table(getFreeIntervalFromSchedule(schedule_table));
 	main_table.insertSimpleTable(getUnavailableTableFromSchedule(schedule_table));
 	main_table.insertSimpleTable(breaks_table);
@@ -77,6 +63,7 @@ int main()
 	
 	SimpleTimeTable new_busy_table = main_table.createSimpleTable(BUSY);
 	
-
+	busy_table.printTable();
+	
 	return 0;
 }
