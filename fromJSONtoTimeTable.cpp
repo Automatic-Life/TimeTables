@@ -6,13 +6,13 @@
 #include "TimeInterval.h"
 #include "TimeTable.h"
 
-const size_t numberOfTimePositions = 2; // 10:30:00 - 2 position / 0010:0030:0000 - 4 positions
+const size_t digitCountInPosition = 2; 
 
 // example input 10:30:00
 doctor_time_t getTimeFromString(const std::string& str) 
 {
-	auto strHour = str.substr(0, numberOfTimePositions);
-	auto strMinutes = str.substr(numberOfTimePositions+1, numberOfTimePositions);
+	auto strHour = str.substr(0, digitCountInPosition);
+	auto strMinutes = str.substr(digitCountInPosition +1, digitCountInPosition);
 	std::string strTime = strHour + strMinutes;
 
 	doctor_time_t outTime = std::stoi(strTime);
@@ -40,7 +40,7 @@ TimeInterval getTimeIntervalFromString(const std::string& str, TimeIntervalType_
 }
 
 
-SimpleTimeTable getTimeTablefromJSON(const std::string& filename, TimeIntervalType_t intervalType)
+SimpleTimeTable createTimeTablefromJSON(const std::string& filename, TimeIntervalType_t intervalType)
 {
 	std::ifstream json_file(filename);
 	if (!json_file)

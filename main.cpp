@@ -1,10 +1,8 @@
 ﻿#include <iostream>
-#include <list>
 #include "TimeIntervalType.h"
 #include "TimeInterval.h"
 #include "TimeTable.h"
-
-SimpleTimeTable getTimeTablefromJSON(const std::string& filename, TimeIntervalType_t intervalType);
+#include "JSONHandler.h"
 
 //schedule table must be correct
 TimeInterval getFreeIntervalFromSchedule(const SimpleTimeTable& table)
@@ -33,13 +31,13 @@ SimpleTimeTable getUnavailableTableFromSchedule(const SimpleTimeTable& table)
 
 int main()
 {
-	SimpleTimeTable schedule_table = getTimeTablefromJSON("schedule.json", SCHEDULE);
+	SimpleTimeTable schedule_table = createTimeTablefromJSON("schedule.json", SCHEDULE);
 	
-	SimpleTimeTable breaks_table = getTimeTablefromJSON("breaks.json", BREAKS);
+	SimpleTimeTable breaks_table = createTimeTablefromJSON("breaks.json", BREAKS);
 	
-	SimpleTimeTable busy_table = getTimeTablefromJSON("busy.json", BUSY);
+	SimpleTimeTable busy_table = createTimeTablefromJSON("busy.json", BUSY);
 	
-	SimpleTimeTable request_table = getTimeTablefromJSON("request.json", REQUEST);
+	SimpleTimeTable request_table = createTimeTablefromJSON("request.json", REQUEST);
 	
 	CorrectTimeTable main_table(getFreeIntervalFromSchedule(schedule_table));
 	main_table.insertSimpleTable(getUnavailableTableFromSchedule(schedule_table));
@@ -58,12 +56,14 @@ int main()
 			rejected_table.pushBack(requestInterval);
 		}
 	}
+
+	createJSONFromTimeTable(rejected_table, "rejected.json");
 		
 	SimpleTimeTable free_table = main_table.createSimpleTable(FREE);
-	
+	createJSONFromTimeTable(free_table, "free.json");
+		
 	SimpleTimeTable new_busy_table = main_table.createSimpleTable(BUSY);
-	
-	busy_table.printTable();
-	
+	createJSONFromTimeTable(new_busy_table, "new_busy.json");
+		
 	return 0;
 }
